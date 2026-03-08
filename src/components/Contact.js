@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useSettings } from "@/context/SettingsContext";
+import ContactForm from "@/components/ContactForm";
 
 const DEFAULT_ADDRESS = "Abbey House, Lincoln Road\nCressex Business Park, High Wycombe\nBuckinghamshire, HP12 3RD";
 const DEFAULT_PHONE = "01494 445291";
@@ -83,76 +84,10 @@ const Contact = () => {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-card rounded-2xl shadow-lg p-4 md:p-8 border border-border"
+            className="bg-card rounded-2xl shadow-lg p-6 md:p-8 border border-border"
           >
-            <h3 className="text-lg md:text-xl font-bold mb-4 text-center md:text-left">Send Us a Message</h3>
-
-            <form className="space-y-3 md:space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <div className="grid md:grid-cols-2 gap-3 md:gap-4">
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-foreground mb-1">Name</label>
-                  <input
-                    type="text"
-                    placeholder="Your name"
-                    className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs md:text-sm font-medium text-foreground mb-1">Phone</label>
-                  <input
-                    type="tel"
-                    placeholder="Your phone"
-                    className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs md:text-sm font-medium text-foreground mb-1">Email</label>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  suppressHydrationWarning
-                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs md:text-sm font-medium text-foreground mb-1">Address</label>
-                <input
-                  type="text"
-                  placeholder="Your address"
-                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="service-select" className="block text-xs md:text-sm font-medium text-foreground mb-1">Service</label>
-                <select id="service-select" className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all text-sm">
-                  <option value="">Select a service</option>
-                  <option value="iron">Iron Only</option>
-                  <option value="wash-iron">Wash + Iron</option>
-                  <option value="wash-dry-fold">Wash + Dry + Fold</option>
-                  <option value="dry-cleaning">Dry Cleaning</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs md:text-sm font-medium text-foreground mb-1">Message</label>
-                <textarea
-                  placeholder="Tell us about your requirements..."
-                  rows={3}
-                  className="w-full px-3 md:px-4 py-2 md:py-3 rounded-lg border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none text-sm"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-primary text-primary-foreground py-2 md:py-3 rounded-full font-semibold hover:brightness-110 transition-all shadow text-sm md:text-base"
-              >
-                Send Message
-              </button>
-            </form>
+            <h3 className="text-xl md:text-2xl font-bold mb-6 text-center md:text-left">Send Us a Message</h3>
+            <ContactForm />
           </motion.div>
         </div>
       </div>

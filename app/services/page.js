@@ -18,8 +18,28 @@ import Footer from "@/components/Footer";
 import { useState, useEffect, useRef } from "react";
 
 import { servicesData } from "@/data/services";
+import Script from "next/script";
 
 export default function ServicesPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Speedy Laundry Professional Services",
+    "description": "Premium laundry, ironing, and dry cleaning services with free pickup and delivery.",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Professional Laundry Catalog",
+      "itemListElement": servicesData.map(service => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": service.title,
+          "description": service.description,
+          "url": `https://speedylaundry.co.uk/services/${service.id}`
+        }
+      }))
+    }
+  };
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -167,6 +187,11 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Script
+        id="services-catalog-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main>

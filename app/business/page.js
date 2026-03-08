@@ -26,6 +26,9 @@ import Footer from "@/components/Footer";
 import TrustedPartners from "@/components/TrustedPartners";
 import { useState } from 'react';
 import { toast } from 'sonner';
+import Script from "next/script";
+
+import Link from "next/link";
 
 const industries = [
   { icon: Hotel, name: "Hotels & B&Bs" },
@@ -38,6 +41,38 @@ const industries = [
 ];
 
 export default function BusinessPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "Commercial Laundry Services",
+    "description": "Premium B2B laundry solutions for hotels, restaurants, gyms, and healthcare across Buckinghamshire.",
+    "provider": {
+      "@type": "LaundryService",
+      "name": "Speedy Laundry",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Abbey House, Lincoln Road, Cressex Business Park",
+        "addressLocality": "High Wycombe",
+        "addressRegion": "Buckinghamshire",
+        "postalCode": "HP12 3RD",
+        "addressCountry": "GB"
+      }
+    },
+    "areaServed": [
+      "High Wycombe", "Marlow", "Beaconsfield", "Maidenhead", "Henley-on-Thames", "Buckinghamshire"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Commercial Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Hotel Linen Service" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Restaurant Laundry" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Gym & Spa Towel Service" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Workwear & Uniform Cleaning" } }
+      ]
+    }
+  };
+
   const [formData, setFormData] = useState({
     business_name: '',
     full_name: '',
@@ -101,6 +136,11 @@ export default function BusinessPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Script
+        id="business-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main>
@@ -134,13 +174,13 @@ export default function BusinessPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <a
-                  href="#quote"
+                <Link
+                  href="/contact?type=business#contact-form"
                   className="inline-flex items-center justify-center gap-2 bg-primary text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:brightness-110 transition-all shadow-lg text-base sm:text-lg"
                 >
                   Get a Quote
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </a>
+                </Link>
                 <a
                   href="tel:01494445291"
                   className="inline-flex items-center justify-center gap-2 bg-white/20 backdrop-blur-sm text-white font-bold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-white/30 transition-all text-base sm:text-lg"
@@ -215,9 +255,10 @@ export default function BusinessPage() {
                   >
                     {/* Double items for perfectly seamless loop */}
                     {[...industries, ...industries].map((industry, idx) => (
-                      <div
+                      <Link
+                        href={`/contact?type=business&industry=${encodeURIComponent(industry.name)}#contact-form`}
                         key={idx}
-                        className="flex items-center gap-2 sm:gap-4 bg-secondary/30 backdrop-blur-sm hover:bg-primary transition-all duration-300 px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl group/item cursor-default"
+                        className="flex items-center gap-2 sm:gap-4 bg-secondary/30 backdrop-blur-sm hover:bg-primary transition-all duration-300 px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl group/item cursor-pointer"
                       >
                         <div className="text-primary group-hover/item:text-white transition-colors">
                           <industry.icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" strokeWidth={2.5} />
@@ -225,7 +266,7 @@ export default function BusinessPage() {
                         <span className="text-sm sm:text-base md:text-lg font-medium text-foreground group-hover/item:text-white transition-colors">
                           {industry.name}
                         </span>
-                      </div>
+                      </Link>
                     ))}
                   </motion.div>
                 </div>
@@ -467,8 +508,9 @@ export default function BusinessPage() {
                 <div className="bg-white rounded-2xl shadow-xl p-5 sm:p-10 lg:p-12 border border-border relative z-10 w-full">
                   <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Business Name *</label>
+                      <label htmlFor="business_name" className="block text-sm font-medium text-foreground mb-2">Business Name *</label>
                       <input
+                        id="business_name"
                         type="text"
                         name="business_name"
                         value={formData.business_name}
@@ -480,8 +522,9 @@ export default function BusinessPage() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Contact Name *</label>
+                        <label htmlFor="full_name" className="block text-sm font-medium text-foreground mb-2">Contact Name *</label>
                         <input
+                          id="full_name"
                           type="text"
                           name="full_name"
                           value={formData.full_name}
@@ -492,8 +535,9 @@ export default function BusinessPage() {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">Phone *</label>
+                        <label htmlFor="phone" className="block text-sm font-medium text-foreground mb-2">Phone *</label>
                         <input
+                          id="phone"
                           type="tel"
                           name="phone"
                           value={formData.phone}
@@ -505,8 +549,9 @@ export default function BusinessPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Email *</label>
+                      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">Email *</label>
                       <input
+                        id="email"
                         type="email"
                         name="email"
                         value={formData.email}
@@ -517,8 +562,9 @@ export default function BusinessPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Industry</label>
+                      <label htmlFor="industry" className="block text-sm font-medium text-foreground mb-2">Industry</label>
                       <select
+                        id="industry"
                         name="industry"
                         value={formData.industry}
                         onChange={handleInputChange}
@@ -535,8 +581,9 @@ export default function BusinessPage() {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-foreground mb-2">Tell us about your needs</label>
+                      <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">Tell us about your needs</label>
                       <textarea
+                        id="message"
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}

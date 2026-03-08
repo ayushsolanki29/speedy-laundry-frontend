@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { MapPin, Check } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const serviceAreas = [
   {
@@ -74,48 +75,52 @@ const ServiceAreas = () => {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6 max-w-7xl mx-auto">
           {serviceAreas.map((region, regionIdx) => (
-            <motion.div
+            <Link 
+              href={`/contact?area=${encodeURIComponent(region.region)}`}
               key={region.region}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: regionIdx * 0.1 }}
-              className="group relative h-[280px] sm:h-[320px] md:h-[350px] lg:h-[400px] rounded-xl sm:rounded-2xl md:rounded-[2rem] overflow-hidden cursor-pointer shadow-lg sm:shadow-xl"
             >
-              {/* Image Background - Optimized */}
-              <Image
-                src={region.image}
-                alt={`${region.region} service area`}
-                fill
-                sizes="(max-width: 1024px) 50vw, 25vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                priority={regionIdx < 2} // Prioritize first 2 images
-                quality={85}
-              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: regionIdx * 0.1 }}
+                className="group relative h-[280px] sm:h-[320px] md:h-[350px] lg:h-[400px] rounded-xl sm:rounded-2xl md:rounded-[2rem] overflow-hidden cursor-pointer shadow-lg sm:shadow-xl"
+              >
+                {/* Image Background - Optimized */}
+                <Image
+                  src={region.image}
+                  alt={`${region.region} service area`}
+                  fill
+                  sizes="(max-width: 1024px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  priority={regionIdx < 2} // Prioritize first 2 images
+                  quality={85}
+                />
 
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                {/* Overlay Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-              {/* Content */}
-              <div className="absolute inset-0 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-end">
-                <div className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 rounded-lg px-2 sm:px-3 py-1 text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-widest mb-2 sm:mb-3 w-fit">
-                  Top Local Service
+                {/* Content */}
+                <div className="absolute inset-0 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-end">
+                  <div className="inline-flex bg-white/10 backdrop-blur-md border border-white/20 rounded-lg px-2 sm:px-3 py-1 text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-widest mb-2 sm:mb-3 w-fit">
+                    Top Local Service
+                  </div>
+                  <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 group-hover:text-primary transition-colors">
+                    {region.region}
+                  </h3>
+                  <p className="text-white/70 text-xs sm:text-sm font-medium">
+                    Stays in & Around {region.count}
+                  </p>
                 </div>
-                <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-white mb-1 sm:mb-2 group-hover:text-primary transition-colors">
-                  {region.region}
-                </h3>
-                <p className="text-white/70 text-xs sm:text-sm font-medium">
-                  Stays in & Around {region.count}
-                </p>
-              </div>
 
-              {/* Hover Badge */}
-              <div className="absolute top-3 sm:top-4 md:top-6 right-3 sm:right-4 md:right-6">
-                <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white flex items-center justify-center shadow-lg transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                  <MapPin className="text-primary w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                {/* Hover Badge */}
+                <div className="absolute top-3 sm:top-4 md:top-6 right-3 sm:right-4 md:right-6">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white flex items-center justify-center shadow-lg transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <MapPin className="text-primary w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </Link>
           ))}
         </div>
 
@@ -159,20 +164,24 @@ const ServiceAreas = () => {
           >
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
               {serviceAreas[activeRegion].areas.map((area, idx) => (
-                <motion.div
+                <Link
+                  href={`/contact?area=${encodeURIComponent(area)}`}
                   key={idx}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: idx * 0.03 }}
-                  className="group/area flex items-center gap-2 sm:gap-3 bg-white rounded-lg sm:rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm hover:shadow-lg hover:scale-105 hover:bg-primary transition-all duration-300 border border-border/30 hover:border-primary cursor-pointer"
                 >
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary/10 group-hover/area:bg-white flex items-center justify-center shrink-0 transition-colors duration-300">
-                    <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary group-hover/area:text-primary" strokeWidth={3} />
-                  </div>
-                  <span className="text-xs sm:text-sm font-medium text-foreground group-hover/area:text-white transition-colors duration-300">
-                    {area}
-                  </span>
-                </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.03 }}
+                    className="group/area flex h-full items-center gap-2 sm:gap-3 bg-white rounded-lg sm:rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm hover:shadow-lg hover:scale-105 hover:bg-primary transition-all duration-300 border border-border/30 hover:border-primary cursor-pointer"
+                  >
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-primary/10 group-hover/area:bg-white flex items-center justify-center shrink-0 transition-colors duration-300">
+                      <Check className="w-3 h-3 sm:w-4 sm:h-4 text-primary group-hover/area:text-primary" strokeWidth={3} />
+                    </div>
+                    <span className="text-xs sm:text-sm font-medium text-foreground group-hover/area:text-white transition-colors duration-300">
+                      {area}
+                    </span>
+                  </motion.div>
+                </Link>
               ))}
             </div>
           </motion.div>

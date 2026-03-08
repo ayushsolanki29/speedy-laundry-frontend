@@ -20,6 +20,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TrustedPartners from "@/components/TrustedPartners";
+import Script from "next/script";
 
 // Animated counter component
 const Counter = ({ end, suffix = "", duration = 2 }) => {
@@ -147,6 +148,23 @@ const features = [
 ];
 
 export default function About() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Speedy Laundry",
+      "foundingDate": "2014",
+      "description": "High Wycombe's premier family-owned laundry and dry cleaning specialist.",
+      "logo": "https://speedylaundry.co.uk/assets/logo.svg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "01494 445291",
+        "contactType": "customer service"
+      }
+    }
+  };
+
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -282,6 +300,11 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-background">
+      <Script
+        id="about-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main>
@@ -483,9 +506,11 @@ export default function About() {
                         <button
                           key={index}
                           onClick={() => goToSlide(index)}
-                          className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentSlide ? 'bg-primary w-6' : 'bg-gray-300 hover:bg-gray-400'}`}
+                          className="group p-2 -m-2 flex items-center justify-center"
                           aria-label={`Go to slide ${index + 1}`}
-                        />
+                        >
+                          <div className={`h-2 transition-all duration-300 rounded-full ${index === currentSlide ? 'bg-primary w-6' : 'bg-gray-300 w-2 group-hover:bg-gray-400'}`} />
+                        </button>
                       ))}
                     </div>
 
@@ -571,14 +596,15 @@ export default function About() {
 
                     {/* Dots Indicator */}
                     <div className="flex gap-2">
-                      {values.slice(0, 5).map((_, index) => (
+                      {values.slice(0, 5) .map((_, index) => (
                         <button
                           key={index}
                           onClick={() => goToSlide(index)}
-                          className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'bg-primary w-6' : 'bg-gray-300'
-                            }`}
+                          className="group p-2 -m-2 flex items-center justify-center"
                           aria-label={`Go to slide ${index + 1}`}
-                        />
+                        >
+                          <div className={`h-2 transition-all rounded-full ${index === currentSlide ? 'bg-primary w-6' : 'bg-gray-300 w-2 hover:bg-gray-400'}`} />
+                        </button>
                       ))}
                       {values.length > 5 && (
                         <div className="flex items-center text-xs text-gray-500">

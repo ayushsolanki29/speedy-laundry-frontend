@@ -176,7 +176,7 @@ const Reviews = () => {
                     <div className="relative">{getAvatar(review)}</div>
                     <div>
                       <span className="font-bold text-xl block leading-tight">{review.name}</span>
-                      <span className="text-xs uppercase font-bold tracking-[0.2em] opacity-60">Verified Client</span>
+                      <span className="text-xs uppercase font-bold tracking-[0.2em] opacity-80">Verified Client</span>
                     </div>
                   </div>
                 </div>
@@ -221,7 +221,7 @@ const Reviews = () => {
                       )}
                       <div>
                         <span className="font-bold text-base block">{review.name}</span>
-                        <span className="text-[10px] uppercase font-bold tracking-widest opacity-60">Verified Client</span>
+                        <span className="text-[10px] uppercase font-bold tracking-widest opacity-80">Verified Client</span>
                       </div>
                     </div>
                   </div>
@@ -240,10 +240,10 @@ const Reviews = () => {
               >
                 {isPaused ? <Play className="w-5 h-5" /> : <Pause className="w-5 h-5" />}
               </button>
-              <button onClick={goPrev} className="p-2.5 rounded-full bg-slate-200 hover:bg-slate-300 transition-colors">
+              <button onClick={goPrev} className="p-2.5 rounded-full bg-slate-200 hover:bg-slate-300 transition-colors" aria-label="Previous review">
                 <ChevronLeft className="w-5 h-5" />
               </button>
-              <button onClick={goNext} className="p-2.5 rounded-full bg-slate-200 hover:bg-slate-300 transition-colors">
+              <button onClick={goNext} className="p-2.5 rounded-full bg-slate-200 hover:bg-slate-300 transition-colors" aria-label="Next review">
                 <ChevronRight className="w-5 h-5" />
               </button>
             </div>
@@ -252,9 +252,11 @@ const Reviews = () => {
                 <button
                   key={index}
                   onClick={() => goToSlide(index)}
-                  className={`h-2 transition-all duration-300 rounded-full ${index === currentSlide ? "bg-primary w-8" : "bg-gray-300 w-2 hover:bg-gray-400"}`}
+                  className="group p-2 -m-2 flex items-center justify-center"
                   aria-label={`Go to slide ${index + 1}`}
-                />
+                >
+                  <div className={`h-2 transition-all duration-300 rounded-full ${index === currentSlide ? "bg-primary w-8" : "bg-gray-300 w-2 group-hover:bg-gray-400"}`} />
+                </button>
               ))}
             </div>
           </div>

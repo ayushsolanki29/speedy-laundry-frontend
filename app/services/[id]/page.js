@@ -18,6 +18,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { servicesData } from "@/data/services";
+import Script from "next/script";
 
 export default function ServiceDetailPage() {
   const params = useParams();
@@ -36,13 +37,64 @@ export default function ServiceDetailPage() {
     );
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": service.title,
+    "description": service.description,
+    "provider": {
+      "@type": "LaundryService",
+      "name": "Speedy Laundry",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Abbey House, Lincoln Road, Cressex Business Park",
+        "addressLocality": "High Wycombe",
+        "addressRegion": "Buckinghamshire",
+        "postalCode": "HP12 3RD",
+        "addressCountry": "GB"
+      }
+    },
+    "areaServed": [
+      "High Wycombe", "Henley-on-Thames", "Beaconsfield", "Maidenhead", "Marlow"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Laundry Services",
+      "itemListElement": service.items.map(item => ({
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": item
+        }
+      }))
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <Script
+        id="service-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
       
-      <main className="pt-24 lg:pt-32">
+      <main className="flex-grow">
+        {/* Top Image Banner - Blurred Hero */}
+        <section className="relative w-full h-[40vh] md:h-[50vh] overflow-hidden">
+          <Image
+            src={service.image}
+            alt={service.title}
+            fill
+            className="object-cover blur-[5px] md:blur-[20px] scale-105 opacity-60"
+            priority
+          />
+          {/* Subtle gradient overlay to blend into the content and ensure navbar visibility */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
+        </section>
+
         {/* Hero Section - Balanced Split */}
-        <section className="py-20 lg:py-32 overflow-hidden">
+        <section className="py-20 lg:py-32 -mt-40 md:-mt-64 relative z-10 overflow-hidden">
           <div className="container px-6">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
               {/* Left Side: Content */}
@@ -69,7 +121,7 @@ export default function ServiceDetailPage() {
 
                 <div className="flex flex-wrap gap-4 mb-10">
                   <Link 
-                    href="/contact"
+                    href={`/contact?subject=${encodeURIComponent(service.title)}`}
                     className="group inline-flex items-center gap-3 bg-primary text-white font-bold px-10 py-5 rounded-full hover:scale-105 transition-all shadow-xl shadow-primary/25"
                   >
                     Book Pickup Now
@@ -218,7 +270,7 @@ export default function ServiceDetailPage() {
             </div>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-10 text-header">Ready to experience {service.title}?</h2>
             <Link 
-              href="/contact"
+              href={`/contact?subject=${encodeURIComponent(service.title)}`}
               className="inline-flex items-center gap-3 bg-primary text-white font-bold px-12 py-5 rounded-full hover:scale-105 transition-all shadow-xl shadow-primary/20 text-lg"
             >
               Get Started Now

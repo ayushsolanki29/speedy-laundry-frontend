@@ -80,10 +80,15 @@ const Footer = () => {
               <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
                 <h3 className="text-white font-bold mb-6 text-xs tracking-[0.2em] uppercase opacity-90">Our Services</h3>
                 <ul className="space-y-4">
-                  {["Iron Only", "Wash + Iron", "Wash, Dry & Fold", "Dry Cleaning"].map((service) => (
-                    <li key={service}>
-                      <Link href="/services" className="text-white/60 hover:text-primary transition-colors block text-sm sm:text-base font-medium">
-                        {service}
+                  {[
+                    { name: "Iron Only", id: "iron-only" },
+                    { name: "Wash + Iron", id: "wash-iron" },
+                    { name: "Wash, Dry & Fold", id: "wash-dry-fold" },
+                    { name: "Dry Cleaning", id: "dry-cleaning" }
+                  ].map((service) => (
+                    <li key={service.id}>
+                      <Link href={`/services/${service.id}`} className="text-white/60 hover:text-primary transition-colors block text-sm sm:text-base font-medium">
+                        {service.name}
                       </Link>
                     </li>
                   ))}
@@ -120,7 +125,7 @@ const Footer = () => {
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                       <Clock className="w-4 h-4 text-primary" />
                     </div>
-                    <span className="text-white/50 text-xs uppercase tracking-widest font-bold whitespace-pre-line">{hours}</span>
+                    <span className="text-white/70 text-xs uppercase tracking-widest font-bold whitespace-pre-line">{hours}</span>
                   </li>
                 </ul>
               </div>
@@ -129,19 +134,43 @@ const Footer = () => {
         </div>
 
         <div className="mt-16 pt-12 border-t border-white/10">
-          <div className="flex flex-col items-center lg:items-start gap-6">
-            <h3 className="text-white font-bold text-[10px] tracking-[0.3em] uppercase mb-2">Locations We Service</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="space-y-4">
+              <h3 className="text-white font-bold text-[10px] tracking-[0.3em] uppercase">High Wycombe & Surrounds</h3>
+              <p className="text-white/60 text-[11px] leading-loose">
+                Hazlemere • Holmer Green • Hughenden • Great Kingshill • Little Kingshill • Naphill • Prestwood • Penn • Tylers Green • Lane End • Stokenchurch • Radnage • Flackwell Heath • Loudwater • Wooburn Green • Hyde Heath
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-white font-bold text-[10px] tracking-[0.3em] uppercase">Henley-on-Thames & Surrounds</h3>
+              <p className="text-white/60 text-[11px] leading-loose">
+                Checkenden • Cookley Green • Fingest • Highmoor • Maidensgrove • Nettlebed • Northend • Nuffield • Rotherfield Grays • Rotherfield Peppard • Skirmett • Stoke Row • Turville • Turville Heath • Watlington • Wargrave • Hurley • Hambleden
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-white font-bold text-[10px] tracking-[0.3em] uppercase">Beaconsfield & Surrounds</h3>
+              <p className="text-white/60 text-[11px] leading-loose">
+                Gerrards Cross • Amersham • Chesham • Chalfont St Giles • Chalfont St Peter • Little Chalfont • Seer Green • Penn Street
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-white font-bold text-[10px] tracking-[0.3em] uppercase">Maidenhead & Marlow</h3>
+              <p className="text-white/60 text-[11px] leading-loose">
+                Bisham • Medmenham • Harleyford Estate • Marlow • Cookham • Shiplake • Kidmore End • Hook End • Sonning Common • Mill End • Binfield Heath • Speen
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 flex flex-col lg:flex-row items-center justify-between gap-6 border-t border-white/5 pt-8">
             <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+              <span className="text-white/60 text-[10px] uppercase tracking-widest font-bold">Quick Links:</span>
               {deliveryAreas.map((area) => (
-                <div key={area.name} className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10 hover:border-primary/30 transition-all group">
-                  <div className="w-6 h-6 rounded-full overflow-hidden shrink-0">
-                    <img src={area.image} alt={area.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  </div>
-                  <span className="text-white/90 text-[10px] sm:text-xs font-bold uppercase tracking-wider">{area.name}</span>
-                </div>
+                <Link key={area.name} href={`/contact?area=${encodeURIComponent(area.name)}`} className="text-white/70 hover:text-primary transition-all text-[10px] uppercase font-bold tracking-wider">
+                  {area.name}
+                </Link>
               ))}
-              <Link href="/#areas" className="text-primary px-4 py-2 rounded-full hover:bg-primary/10 transition-all font-bold text-[10px] uppercase tracking-wider border border-primary/20">
-                +60 More Areas
+              <Link href="/#areas" className="text-sky-400 hover:text-sky-300 hover:underline transition-all text-[10px] uppercase font-bold tracking-wider">
+                Explore Full Coverage
               </Link>
             </div>
           </div>
@@ -154,6 +183,15 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-white/50 text-xs tracking-wide">
               © {new Date().getFullYear()} Speedy Laundry. Crafted with pride in HP12.
+              <span className="mx-2 opacity-20">|</span>
+              Made with <span className="text-primary animate-pulse">❤️</span> by{" "}
+              <Link 
+                href="https://ayushsolanki.com" 
+                target="_blank" 
+                className="text-white/70 hover:text-white transition-colors font-semibold"
+              >
+                ayushsolanki
+              </Link>
             </p>
             <div className="flex gap-8">
               <Link href="/privacy" className="text-white/50 hover:text-white transition-colors text-xs font-medium tracking-widest uppercase">Privacy</Link>

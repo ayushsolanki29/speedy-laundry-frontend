@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import {
@@ -8,15 +7,16 @@ import {
   Phone,
   Mail,
   Clock,
-  Send,
   CheckCircle,
   Truck,
   Calendar,
-  Loader2
+  Building2
 } from "lucide-react";
-import { toast } from "sonner";
+import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ContactForm from "@/components/ContactForm";
+import Script from "next/script";
 
 const contactMethods = [
   {
@@ -42,70 +42,50 @@ const openingHours = [
 ];
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    full_name: '',
-    phone: '',
-    email: '',
-    postcode: '',
-    service: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Client-side validation
-    if (formData.phone.length > 30) {
-      toast.error('Phone number is too long (max 30 characters)');
-      return;
-    }
-    if (formData.postcode.length > 20) {
-      toast.error('Postcode is too long (max 20 characters)');
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (data.status === 'success') {
-        toast.success(data.message);
-        setFormData({
-          full_name: '',
-          phone: '',
-          email: '',
-          postcode: '',
-          service: '',
-          message: ''
-        });
-      } else {
-        toast.error(data.message || 'Submission failed. Please check your inputs.');
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LaundryService",
+    "name": "Speedy Laundry",
+    "image": "https://speedylaundry.co.uk/assets/logo.svg",
+    "telephone": "01494 445291",
+    "email": "info@speedylaundry.co.uk",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Abbey House, Lincoln Road, Cressex Business Park",
+      "addressLocality": "High Wycombe",
+      "addressRegion": "Buckinghamshire",
+      "postalCode": "HP12 3RD",
+      "addressCountry": "GB"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 51.626177,
+      "longitude": -0.772390
+    },
+    "url": "https://speedylaundry.co.uk/contact",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"],
+        "opens": "06:00",
+        "closes": "15:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Friday",
+        "opens": "06:00",
+        "closes": "14:00"
       }
-    } catch (error) {
-      toast.error('Failed to connect to server. Please try again.');
-      console.error('Contact error:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    ]
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
+      <Script
+        id="contact-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Header />
 
       <main>
@@ -171,7 +151,7 @@ export default function ContactPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="bg-white rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl shadow-black/5 border border-border/50">
+                <div id="contact-form" className="bg-white rounded-3xl p-6 sm:p-8 lg:p-12 shadow-xl shadow-black/5 border border-border/50 mb-8">
                   <div className="flex items-center gap-4 mb-10">
                     <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
                       <Calendar className="w-6 lg:w-7 h-6 lg:h-7 text-primary" />
@@ -182,109 +162,29 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-6 lg:space-y-8">
-                    <div className="grid sm:grid-cols-2 gap-6 lg:gap-8">
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-foreground/80 ml-1">Full Name *</label>
-                        <input
-                          type="text"
-                          name="full_name"
-                          value={formData.full_name}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-5 py-4 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-base"
-                          placeholder="Your name"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-foreground/80 ml-1">Phone Number *</label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-5 py-4 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-base"
-                          placeholder="Your phone"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-6 lg:gap-8">
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-foreground/80 ml-1">Email Address *</label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-5 py-4 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-base"
-                          placeholder="your@email.com"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-semibold text-foreground/80 ml-1">Postcode *</label>
-                        <input
-                          type="text"
-                          name="postcode"
-                          value={formData.postcode}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-5 py-4 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-base"
-                          placeholder="e.g. HP12 3RD"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-foreground/80 ml-1">Service Required</label>
-                      <select
-                        name="service"
-                        value={formData.service}
-                        onChange={handleChange}
-                        className="w-full px-5 py-4 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-base cursor-pointer"
-                      >
-                        <option value="">Select a service</option>
-                        <option value="iron">Iron Only</option>
-                        <option value="wash-iron">Wash + Iron</option>
-                        <option value="wash-dry-fold">Wash, Dry & Fold</option>
-                        <option value="dry-cleaning">Dry Cleaning</option>
-                        <option value="commercial">Commercial / Business</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-semibold text-foreground/80 ml-1">Message (Optional)</label>
-                      <textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleChange}
-                        className="w-full px-5 py-4 rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none text-base"
-                        rows={4}
-                        placeholder="Any special requests or details about your order..."
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-primary text-white font-bold py-4 lg:py-5 rounded-2xl hover:brightness-110 active:scale-[0.99] transition-all text-lg flex items-center justify-center gap-3 shadow-lg shadow-primary/20 disabled:opacity-70"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="w-6 h-6 animate-spin" />
-                          <span>Processing...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-5 h-5" />
-                          <span>Request Pickup</span>
-                        </>
-                      )}
-                    </button>
-                  </form>
+                  <ContactForm />
                 </div>
+
+                {/* Team Quote (Now below Form) */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="bg-primary/5 rounded-[2.5rem] p-8 sm:p-12 border border-primary/10 relative overflow-hidden group shadow-sm hover:shadow-md transition-all"
+                >
+                  <div className="relative z-10">
+                    <p className="text-foreground italic text-xl sm:text-2xl leading-relaxed mb-6">
+                      &ldquo;Great service starts with a simple conversation. We treat every garment with the precision and care it deserves.&rdquo;
+                    </p>
+                    <div className="flex items-center gap-4">
+                      <div className="h-px w-12 bg-primary" />
+                      <span className="font-script text-primary text-3xl sm:text-4xl">The Speedy Laundry Team</span>
+                    </div>
+                  </div>
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -tr-10 -te-10 group-hover:bg-primary/10 transition-all duration-700" />
+                  <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-primary/5 rounded-full blur-3xl" />
+                </motion.div>
               </motion.div>
 
               {/* Info Column */}
@@ -294,6 +194,39 @@ export default function ContactPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
+                {/* Business Owner CTA Card */}
+                <div className="bg-primary text-white rounded-[2rem] p-8 shadow-xl shadow-primary/20 relative overflow-hidden group border border-primary/20">
+                  <div className="relative z-10">
+                    <div className="flex items-center gap-4 mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20">
+                        <Building2 className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-xl font-display font-bold">Business Owner?</h3>
+                    </div>
+                    <p className="text-white/80 text-sm mb-8 leading-relaxed">
+                      We provide specialized commercial laundry services for hotels, restaurants, and schools with dedicated account management.
+                    </p>
+                    <div className="flex flex-row gap-3">
+                      <Link
+                        href="/business#quote"
+                        className="flex-1 inline-flex items-center gap-2 bg-white text-primary font-bold px-4 py-4 rounded-2xl hover:bg-white/90 active:scale-95 transition-all justify-center shadow-lg text-sm"
+                      >
+                        <span>Inquire</span>
+                        <CheckCircle className="w-4 h-4 shrink-0" />
+                      </Link>
+                      <Link
+                        href="/business"
+                        className="flex-1 inline-flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold px-4 py-4 rounded-2xl hover:bg-white/20 active:scale-95 transition-all text-sm"
+                      >
+                        Details
+                      </Link>
+                    </div>
+                  </div>
+                  {/* Decorative Elements */}
+                  <div className="absolute top-0 right-0 -tr-4 -te-4 w-32 h-32 bg-white/10 rounded-full blur-3xl group-hover:bg-white/20 transition-all duration-700" />
+                  <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-black/10 rounded-full blur-2xl" />
+                </div>
+
                 <div className="space-y-4">
                   {contactMethods.map((method, index) => (
                     <a
@@ -331,39 +264,27 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div className="bg-foreground rounded-2xl p-6">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-primary" />
+                {/* Opening Hours (Now alone in sidebar bottom) */}
+                <div className="bg-foreground rounded-[2rem] p-8 shadow-xl shadow-black/5">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center border border-white/5">
+                      <Clock className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="font-bold text-white">Opening Hours</h3>
+                    <h3 className="text-xl font-display font-bold text-white uppercase tracking-tight">Opening Hours</h3>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {openingHours.map((item, index) => (
                       <div
                         key={index}
-                        className={`flex justify-between items-center pb-3 ${index < openingHours.length - 1 ? 'border-b border-white/10' : ''}`}
+                        className={`flex justify-between items-center py-2 ${index < openingHours.length - 1 ? 'border-b border-white/10' : ''}`}
                       >
-                        <span className="text-white/70 text-sm">{item.day}</span>
-                        <span className={`font-medium text-sm ${item.hours === 'Closed' ? 'text-white/50' : 'text-white'}`}>
+                        <span className="text-white/70 text-sm font-medium">{item.day}</span>
+                        <span className={`font-bold text-sm ${item.hours === 'Closed' ? 'text-white/40' : 'text-white'}`}>
                           {item.hours}
                         </span>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                <div className="bg-primary/5 rounded-2xl p-8 border border-primary/10 relative overflow-hidden group">
-                  <div className="relative z-10">
-                    <p className="text-foreground italic text-lg leading-relaxed mb-4">
-                      &ldquo;Great service starts with a simple conversation. We treat every garment with the precision and care it deserves.&rdquo;
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="h-px w-8 bg-primary" />
-                      <span className="font-script text-primary text-2xl">The Speedy Laundry Team</span>
-                    </div>
-                  </div>
-                  <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-500" />
                 </div>
               </motion.div>
             </div>

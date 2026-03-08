@@ -172,9 +172,9 @@ const Services = () => {
               >
                 {/* Double items for perfectly seamless loop */}
                 {[...additionalItems, ...additionalItems].map((item, idx) => (
-                  <button
+                  <Link
+                    href={`/contact?subject=${encodeURIComponent(item.name)}`}
                     key={idx}
-                    onClick={() => window.location.href = '/contact'}
                     className="flex items-center gap-2 sm:gap-4 bg-secondary/30 backdrop-blur-sm hover:bg-primary transition-all duration-300 px-4 sm:px-6 md:px-8 py-3 sm:py-4 md:py-5 rounded-xl sm:rounded-2xl border border-border group/item cursor-pointer justify-center sm:justify-start"
                   >
                     <div className="text-primary group-hover/item:text-white transition-colors">
@@ -183,7 +183,7 @@ const Services = () => {
                     <span className="text-sm sm:text-base md:text-lg font-medium text-foreground group-hover/item:text-white transition-colors">
                       {item.name}
                     </span>
-                  </button>
+                  </Link>
                 ))}
               </motion.div>
             </div>
