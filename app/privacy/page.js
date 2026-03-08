@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
                 <section className="relative h-[40vh] min-h-[400px] flex items-center overflow-hidden pt-20">
                     <div className="absolute inset-0">
                         <Image
-                            src="https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&h=1080&fit=crop"
+                            src="/assets/img-grid/IMG_9086.jpg"
                             alt="Privacy Policy"
                             fill
                             className="object-cover"
@@ -105,17 +105,32 @@ export default function PrivacyPolicy() {
                                     </ul>
                                 </div>
 
-                                <div className="bg-primary/5 border border-primary/20 rounded-3xl p-8 md:p-12">
-                                    <h2 className="text-2xl font-display font-bold text-foreground mb-4">Contact Our Privacy Team</h2>
-                                    <p className="text-muted-foreground mb-6">
-                                        If you have any questions or concerns about our privacy practices, please reach out to us.
-                                    </p>
-                                    <a
-                                        href="mailto:privacy@speedylaundry.co.uk"
-                                        className="inline-flex items-center gap-2 bg-primary text-white font-bold px-8 py-4 rounded-full hover:brightness-110 transition-all shadow-lg"
-                                    >
-                                        Contact privacy office
-                                    </a>
+                                <div className="bg-foreground text-white rounded-[2rem] p-8 md:p-12 relative overflow-hidden group shadow-xl">
+                                    <div className="absolute inset-0 z-0">
+                                        <Image
+                                          src="/assets/img-grid/259949512_4615477651842803_5580518647924254211_n.jpg"
+                                          alt="Privacy team"
+                                          fill
+                                          className="object-cover opacity-30 mix-blend-overlay group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-transparent z-10" />
+                                    </div>
+                                    <div className="relative z-20">
+                                      <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4 drop-shadow-md">Contact Our <span className="text-primary italic">Privacy Team</span></h2>
+                                      <p className="text-white/80 text-lg mb-8 max-w-lg leading-relaxed">
+                                          If you have any questions or concerns about our privacy practices or wish to request data modifications, please reach out to us.
+                                      </p>
+                                      <a
+                                          href="mailto:info@speedylaundry.co.uk"
+                                          className="inline-flex items-center gap-3 bg-white text-foreground font-bold px-8 py-4 rounded-full hover:bg-white/90 hover:scale-105 transition-all shadow-xl group/btn"
+                                      >
+                                          Contact privacy office
+                                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover/btn:bg-primary/20 transition-colors">
+                                            <Shield className="w-4 h-4 text-primary" />
+                                          </div>
+                                      </a>
+                                    </div>
+                                    <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl" />
                                 </div>
                             </motion.div>
                         </div>

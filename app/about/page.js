@@ -71,7 +71,7 @@ const Counter = ({ end, suffix = "", duration = 2 }) => {
 };
 
 const stats = [
-  { value: 10, suffix: "+", label: "Years Experience" },
+  { value: 30, suffix: "+", label: "Years Experience" },
   { value: 5000, suffix: "+", label: "Happy Customers" },
   { value: 24, suffix: "hr", label: "Fast Turnaround" },
   { value: 100, suffix: "%", label: "Eco-Friendly" },
@@ -312,7 +312,7 @@ export default function About() {
         <section className="relative h-[70vh] sm:h-[80vh] md:h-[90vh] min-h-[500px] sm:min-h-[550px] md:min-h-[600px] flex items-center overflow-hidden pt-16 sm:pt-20">
           <div className="absolute inset-0">
             <Image
-              src="https://images.unsplash.com/photo-1489274495757-95c7c837b101?w=1920&h=1080&fit=crop"
+              src="/assets/our services/photo-1489274495757-95c7c837b101.jpg"
               alt="Premium laundry service"
               fill
               className="object-cover"
@@ -483,13 +483,13 @@ export default function About() {
                       >
                         <ArrowRight className="w-6 h-6 text-primary rotate-180 group-hover/btn:scale-110 transition-transform" />
                       </button>
-                      
+
                       <div className="bg-primary/5 px-6 py-3 rounded-full border border-primary/10 backdrop-blur-md">
                         <span className="text-xs font-bold uppercase tracking-widest text-primary/80 leading-none">
                           Explore Our Legacy
                         </span>
                       </div>
-                      
+
                       <button
                         onClick={nextSlide}
                         className="w-12 h-12 rounded-full bg-white shadow-lg hover:bg-gray-50 transition-colors flex items-center justify-center group/btn disabled:opacity-50 disabled:cursor-not-allowed"
@@ -596,7 +596,7 @@ export default function About() {
 
                     {/* Dots Indicator */}
                     <div className="flex gap-2">
-                      {values.slice(0, 5) .map((_, index) => (
+                      {values.slice(0, 5).map((_, index) => (
                         <button
                           key={index}
                           onClick={() => goToSlide(index)}
@@ -650,7 +650,7 @@ export default function About() {
               >
                 <div className="relative">
                   <Image
-                    src="https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?w=800&h=600&fit=crop"
+                    src="/assets/img-grid/IMG_9085.jpg"
                     alt="Our team at work"
                     width={800}
                     height={600}

@@ -8,7 +8,7 @@ export const metadata = {
   openGraph: {
     title: "The Story of Speedy Laundry | Quality & Care Since 1994",
     description: "Discover how we've been serving Buckinghamshire with premium laundry services for over 30 years.",
-    images: ["https://images.unsplash.com/photo-1489274495757-95c7c837b101?w=1200&h=630&fit=crop"]
+    images: ["/assets/img-grid/IMG_9081.jpg"]
   }
 };
 

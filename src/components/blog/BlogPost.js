@@ -76,9 +76,21 @@ const BlogPost = ({ slug }) => {
   return (
     <article className="min-h-screen bg-white">
       {/* Header Section */}
-      <section className="bg-[#1a142e] pt-32 pb-20 md:pt-40 md:pb-32 text-center relative overflow-hidden">
-        {/* Subtle Decorative Gradient */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
+      <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 text-center overflow-hidden">
+        {/* Background Image or Fallback */}
+        <div className="absolute inset-0 z-0 bg-[#1a142e]">
+          {post.image_url ? (
+            <>
+              <div 
+                className="absolute inset-0 bg-cover bg-center blur-[2px] transform scale-110"
+                style={{ backgroundImage: `url(${post.image_url})` }}
+              />
+              <div className="absolute inset-0 bg-black/50 pointer-events-none" />
+            </>
+          ) : (
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
+          )}
+        </div>
 
         <div className="container relative z-10 px-4">
           <motion.div
@@ -176,7 +188,14 @@ const BlogPost = ({ slug }) => {
                         {rPost.image_url ? (
                           <img src={rPost.image_url} alt={rPost.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                         ) : (
-                          <div className="w-full h-full bg-slate-50" />
+                          <div className="w-full h-full bg-slate-50 flex flex-col items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-3">
+                              <span className="text-primary font-display font-bold text-2xl">
+                                Speedy
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Laundry</span>
+                          </div>
                         )}
                       </div>
                       <h3 className="text-xl font-display font-bold text-header mb-4 group-hover:text-primary transition-colors line-clamp-2 leading-tight">

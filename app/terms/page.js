@@ -16,7 +16,7 @@ export default function TermsAndConditions() {
                 <section className="relative h-[40vh] min-h-[400px] flex items-center overflow-hidden pt-20">
                     <div className="absolute inset-0">
                         <Image
-                            src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1920&h=1080&fit=crop"
+                            src="/assets/img-grid/IMG_9087.jpg"
                             alt="Terms and Conditions"
                             fill
                             className="object-cover"
@@ -97,18 +97,34 @@ export default function TermsAndConditions() {
                                     </p>
                                 </div>
 
-                                <div className="bg-foreground text-white rounded-3xl p-8 md:p-12 relative overflow-hidden group">
+                                <div className="bg-foreground text-white rounded-[2rem] p-8 md:p-12 relative overflow-hidden group shadow-xl">
+                                    <div className="absolute inset-0 z-0">
+                                        <Image
+                                          src="/assets/img-grid/20208 - Vodafone - WashCo - B-roll Cutdown.00_28_15_02.Still002.jpg"
+                                          alt="Support team"
+                                          fill
+                                          className="object-cover opacity-30 mix-blend-overlay group-hover:scale-110 transition-transform duration-700"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-transparent z-10" />
+                                    </div>
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:bg-primary/30 transition-all duration-500" />
-                                    <h2 className="text-2xl font-display font-bold mb-4 relative z-10">Have questions?</h2>
-                                    <p className="text-white/60 mb-6 relative z-10">
-                                        If anything in our terms is unclear, we're here to help you understand our commitment to your garments.
-                                    </p>
-                                    <a
-                                        href="/contact"
-                                        className="inline-flex items-center gap-2 bg-primary text-white font-bold px-8 py-4 rounded-full hover:brightness-110 transition-all shadow-lg relative z-10"
-                                    >
-                                        Contact Support
-                                    </a>
+                                    
+                                    <div className="relative z-20">
+                                      <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4 drop-shadow-md">Have <span className="text-primary italic">questions?</span></h2>
+                                      <p className="text-white/80 text-lg mb-8 max-w-lg leading-relaxed">
+                                          If anything in our terms is unclear, we're here to help you understand our commitment to your garments.
+                                      </p>
+                                      <a
+                                          href="/contact"
+                                          className="inline-flex items-center gap-3 bg-white text-foreground font-bold px-8 py-4 rounded-full hover:bg-white/90 hover:scale-105 transition-all shadow-xl group/btn"
+                                      >
+                                          Contact Support
+                                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover/btn:bg-primary/20 transition-colors">
+                                            <AlertCircle className="w-4 h-4 text-primary" />
+                                          </div>
+                                      </a>
+                                    </div>
+                                    <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl z-0" />
                                 </div>
                             </motion.div>
                         </div>

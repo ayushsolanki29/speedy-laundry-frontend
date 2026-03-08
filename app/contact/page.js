@@ -24,14 +24,16 @@ const contactMethods = [
     title: "Call Us",
     value: "01494 445291",
     href: "tel:01494445291",
-    desc: "Speak directly with our team"
+    desc: "Speak directly with our team",
+    bgImage: "/assets/img-grid/IMG_9082.jpg"
   },
   {
     icon: Mail,
     title: "Email Us",
     value: "info@speedylaundry.co.uk",
     href: "mailto:info@speedylaundry.co.uk",
-    desc: "We reply within 24 hours"
+    desc: "We reply within 24 hours",
+    bgImage: "/assets/img-grid/IMG_9084.jpg"
   },
 ];
 
@@ -227,19 +229,33 @@ export default function ContactPage() {
                   <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-black/10 rounded-full blur-2xl" />
                 </div>
 
-                <div className="space-y-4">
+                <div className="grid gap-4">
                   {contactMethods.map((method, index) => (
                     <a
                       key={index}
                       href={method.href}
-                      className="flex items-center gap-4 p-5 bg-white rounded-2xl border border-border hover:border-primary/30 hover:shadow-md transition-all group"
+                      className="relative overflow-hidden flex flex-col p-6 rounded-[2rem] border border-border group shadow-sm hover:shadow-xl transition-all duration-500"
                     >
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary transition-colors">
-                        <method.icon className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
+                      {/* Background Image & Overlay */}
+                      <div className="absolute inset-0 z-0">
+                        <Image
+                          src={method.bgImage}
+                          alt={method.title}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-black/60 group-hover:bg-primary/80 transition-colors duration-500" />
                       </div>
-                      <div>
-                        <div className="font-bold text-foreground">{method.title}</div>
-                        <div className="text-primary font-medium">{method.value}</div>
+
+                      <div className="relative z-10 flex items-center gap-5">
+                        <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                          <method.icon className="w-6 h-6 text-white drop-shadow-md" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-white/90 text-sm uppercase tracking-widest mb-1">{method.title}</div>
+                          <div className="text-white font-display font-bold text-xl drop-shadow-md">{method.value}</div>
+                          <div className="text-white/70 text-xs mt-1">{method.desc}</div>
+                        </div>
                       </div>
                     </a>
                   ))}
