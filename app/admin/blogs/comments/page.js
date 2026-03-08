@@ -19,10 +19,22 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 
-export default function CommentModerationPage() {
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import Pagination from '@/components/ui/Pagination'
+import { Suspense } from 'react'
+
+function CommentModerationContent() {
     const [comments, setComments] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [searchTerm, setSearchTerm] = useState('')
+
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const searchTerm = searchParams.get('search') || ''
+    const currentPage = parseInt(searchParams.get('page') || '1', 10)
+    const pageSize = 20
+    
     const [replyingTo, setReplyingTo] = useState(null)
     const [replyContent, setReplyContent] = useState('')
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -151,7 +163,14 @@ export default function CommentModerationPage() {
                             type="text"
                             placeholder="Search comments..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => {
+                                const val = e.target.value
+                                const params = new URLSearchParams(searchParams.toString())
+                                if (val) params.set('search', val)
+                                else params.delete('search')
+                                params.delete('page')
+                                router.push(`${pathname}?${params.toString()}`)
+                            }}
                             className="pl-11 pr-6 py-3 bg-white border border-slate-100 rounded-2xl text-xs font-bold focus:ring-4 focus:ring-primary/5 transition-all w-full md:w-64"
                         />
                     </div>
@@ -165,7 +184,7 @@ export default function CommentModerationPage() {
                 </div>
             ) : filteredComments.length > 0 ? (
                 <div className="grid gap-6">
-                    {filteredComments.map((comment) => (
+                    {filteredComments.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((comment) => (
                         <motion.div
                             key={comment.id}
                             initial={{ opacity: 0, y: 10 }}
@@ -197,7 +216,7 @@ export default function CommentModerationPage() {
                                             <div className="w-1.5 h-1.5 rounded-full bg-primary" />
                                             <span className="text-[10px] font-black text-primary uppercase tracking-widest whitespace-nowrap">{comment.blog_title}</span>
                                         </div>
-                                        <Link href={`/blog-preview/${comment.blog_id}`} target="_blank" className="text-slate-400 hover:text-primary transition-colors">
+                                        <Link href={`/blog/${comment.blog_slug}`} target="_blank" className="text-slate-400 hover:text-primary transition-colors">
                                             <ExternalLink className="w-3.5 h-3.5" />
                                         </Link>
                                     </div>
@@ -307,6 +326,19 @@ export default function CommentModerationPage() {
                     <p className="text-slate-400 text-sm font-medium">When users start commenting on your blogs, they'll appear here for moderation.</p>
                 </div>
             )}
+            
+            {!isLoading && filteredComments.length > 0 && (
+                <Pagination totalItems={filteredComments.length} pageSize={pageSize} />
+            )}
         </div>
     )
 }
+
+export default function CommentModerationPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+            <CommentModerationContent />
+        </Suspense>
+    )
+}
+

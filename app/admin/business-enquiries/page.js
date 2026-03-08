@@ -1,16 +1,25 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Search, Building2, Mail, Phone, Calendar, ChevronRight, Loader2, RefreshCcw } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import Link from 'next/link'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import Pagination from '@/components/ui/Pagination'
 
-export default function BusinessEnquiriesPage() {
+function BusinessEnquiriesContent() {
     const [enquiries, setEnquiries] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [activeTab, setActiveTab] = useState('All')
-    const [searchTerm, setSearchTerm] = useState('')
+
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const activeTab = searchParams.get('tab') || 'All'
+    const searchTerm = searchParams.get('search') || ''
+    const currentPage = parseInt(searchParams.get('page') || '1', 10)
+    const pageSize = 20
 
     const fetchEnquiries = async () => {
         setIsLoading(true)
@@ -85,7 +94,14 @@ export default function BusinessEnquiriesPage() {
                         type="text"
                         placeholder="Search by company, contact, email..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            const params = new URLSearchParams(searchParams.toString())
+                            if (val) params.set('search', val)
+                            else params.delete('search')
+                            params.delete('page')
+                            router.push(`${pathname}?${params.toString()}`)
+                        }}
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-primary/20"
                     />
                 </div>
@@ -93,7 +109,12 @@ export default function BusinessEnquiriesPage() {
                     {['All', 'New', 'In_progress', 'Completed', 'Cancelled'].map((tab) => (
                         <button
                             key={tab}
-                            onClick={() => setActiveTab(tab)}
+                            onClick={() => {
+                                const params = new URLSearchParams(searchParams.toString())
+                                params.set('tab', tab)
+                                params.delete('page')
+                                router.push(`${pathname}?${params.toString()}`)
+                            }}
                             className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab
                                 ? 'bg-primary text-white shadow-lg shadow-primary/25'
                                 : 'bg-gray-50 text-muted-foreground hover:bg-gray-100 hover:text-foreground'
@@ -121,7 +142,7 @@ export default function BusinessEnquiriesPage() {
                         <p className="text-gray-400 text-sm">Commercial quote requests will appear here.</p>
                     </div>
                 ) : (
-                    filteredEnquiries.map((enquiry, index) => (
+                    filteredEnquiries.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((enquiry, index) => (
                         <motion.div
                             key={enquiry.id}
                             initial={{ opacity: 0, y: 10 }}
@@ -167,6 +188,18 @@ export default function BusinessEnquiriesPage() {
                     ))
                 )}
             </div>
+            
+            {!isLoading && filteredEnquiries.length > 0 && (
+                <Pagination totalItems={filteredEnquiries.length} pageSize={pageSize} />
+            )}
         </div>
+    )
+}
+
+export default function BusinessEnquiriesPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+            <BusinessEnquiriesContent />
+        </Suspense>
     )
 }

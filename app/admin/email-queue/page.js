@@ -19,14 +19,24 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 
-export default function EmailQueuePage() {
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import Pagination from '@/components/ui/Pagination'
+import { Suspense } from 'react'
+
+function EmailQueueContent() {
     const [queue, setQueue] = useState([])
     const [stats, setStats] = useState({ pending: 0 })
     const [isLoading, setIsLoading] = useState(true)
     const [isProcessing, setIsProcessing] = useState(false)
     const [isCleaning, setIsCleaning] = useState(false)
-    const [activeTab, setActiveTab] = useState('All')
-    const [searchTerm, setSearchTerm] = useState('')
+
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const searchTerm = searchParams.get('search') || ''
+    const currentPage = parseInt(searchParams.get('page') || '1', 10)
+    const pageSize = 20
 
     const fetchQueue = async () => {
         setIsLoading(true)
@@ -216,7 +226,14 @@ export default function EmailQueuePage() {
                         type="text"
                         placeholder="Search recipient or subject..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            const params = new URLSearchParams(searchParams.toString())
+                            if (val) params.set('search', val)
+                            else params.delete('search')
+                            params.delete('page')
+                            router.push(`${pathname}?${params.toString()}`)
+                        }}
                         className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-primary/20 text-sm font-medium"
                     />
                 </div>
@@ -253,7 +270,7 @@ export default function EmailQueuePage() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    filteredQueue.map((item, idx) => (
+                                    filteredQueue.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((item, idx) => (
                                         <motion.tr 
                                             key={item.id}
                                             initial={{ opacity: 0 }}
@@ -311,6 +328,19 @@ export default function EmailQueuePage() {
                     </p>
                 </div>
             </div>
+            
+            {!isLoading && filteredQueue.length > 0 && (
+                <Pagination totalItems={filteredQueue.length} pageSize={pageSize} />
+            )}
         </div>
     )
 }
+
+export default function EmailQueuePage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+            <EmailQueueContent />
+        </Suspense>
+    )
+}
+

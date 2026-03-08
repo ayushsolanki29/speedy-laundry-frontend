@@ -4,7 +4,11 @@ import { useState, useEffect } from 'react'
 import { Star, Plus, Pencil, Trash2, Pin, PinOff, Upload, Loader2, X } from 'lucide-react'
 import { toast } from 'sonner'
 
-export default function AdminReviewsPage() {
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import Pagination from '@/components/ui/Pagination'
+import { Suspense } from 'react'
+
+function AdminReviewsContent() {
     const [reviews, setReviews] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [showForm, setShowForm] = useState(false)
@@ -12,6 +16,13 @@ export default function AdminReviewsPage() {
     const [form, setForm] = useState({ name: '', content: '', rating: 5, photo_url: '', display_order: 0, is_pinned: 0 })
     const [isSaving, setIsSaving] = useState(false)
     const [photoUploading, setPhotoUploading] = useState(false)
+
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const currentPage = parseInt(searchParams.get('page') || '1', 10)
+    const pageSize = 20
 
     const fetchReviews = async () => {
         try {
@@ -266,7 +277,7 @@ export default function AdminReviewsPage() {
                 {reviews.length === 0 ? (
                     <p className="text-center text-muted-foreground py-12">No reviews yet. Add one to get started.</p>
                 ) : (
-                    reviews.map(r => (
+                    reviews.slice((currentPage - 1) * pageSize, currentPage * pageSize).map(r => (
                         <div key={r.id} className="bg-white rounded-2xl border border-gray-200 p-5 flex items-start gap-4">
                             <div className="shrink-0">
                                 {r.photo_url ? (
@@ -300,6 +311,19 @@ export default function AdminReviewsPage() {
                     ))
                 )}
             </div>
+
+            {!isLoading && reviews.length > 0 && (
+                <Pagination totalItems={reviews.length} pageSize={pageSize} />
+            )}
         </div>
     )
 }
+
+export default function AdminReviewsPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+            <AdminReviewsContent />
+        </Suspense>
+    )
+}
+

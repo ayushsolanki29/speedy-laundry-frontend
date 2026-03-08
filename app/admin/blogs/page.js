@@ -21,10 +21,21 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 
-export default function BlogsPage() {
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import Pagination from '@/components/ui/Pagination'
+import { Suspense } from 'react'
+
+function BlogsContent() {
     const [blogs, setBlogs] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [searchTerm, setSearchTerm] = useState('')
+
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const searchTerm = searchParams.get('search') || ''
+    const currentPage = parseInt(searchParams.get('page') || '1', 10)
+    const pageSize = 20
 
     const fetchBlogs = async () => {
         setIsLoading(true)
@@ -123,7 +134,14 @@ export default function BlogsPage() {
                         type="text"
                         placeholder="Search by title or category..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            const params = new URLSearchParams(searchParams.toString())
+                            if (val) params.set('search', val)
+                            else params.delete('search')
+                            params.delete('page')
+                            router.push(`${pathname}?${params.toString()}`)
+                        }}
                         className="w-full pl-11 pr-4 py-3 bg-gray-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-blue-500/20 transition-all"
                     />
                 </div>
@@ -148,7 +166,7 @@ export default function BlogsPage() {
                         </thead>
                         <tbody className="divide-y divide-gray-50">
                             {filteredBlogs.length > 0 ? (
-                                filteredBlogs.map((blog) => (
+                                filteredBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((blog) => (
                                     <tr key={blog.id} className="hover:bg-gray-50/30 transition-all duration-200 group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-4">
@@ -239,6 +257,18 @@ export default function BlogsPage() {
                     </table>
                 </div>
             </div>
+            
+            {!isLoading && filteredBlogs.length > 0 && (
+                <Pagination totalItems={filteredBlogs.length} pageSize={pageSize} />
+            )}
         </div>
+    )
+}
+
+export default function BlogsPage() {
+    return (
+        <Suspense fallback={<div className="flex justify-center py-20"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>}>
+            <BlogsContent />
+        </Suspense>
     )
 }
