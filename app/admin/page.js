@@ -123,13 +123,20 @@ export default function DashboardPage() {
   let chartData = []
   if (range === 'today') {
     chartData = visitorHistory.length
-      ? [{ ...visitorHistory[0], label: 'Today' }]
+      ? [{ 
+          date: visitorHistory[0].visit_date || new Date().toISOString().split('T')[0], 
+          count: parseInt(visitorHistory[0].count, 10), 
+          label: 'Today' 
+        }]
       : [{ date: new Date().toISOString().split('T')[0], count: 0, label: 'Today' }]
   } else if (range === 'week' || range === 'month' || range === 'custom') {
     const days = range === 'week' ? 7 : range === 'month' ? 30 : 
       Math.max(1, Math.ceil((new Date(customTo) - new Date(customFrom)) / (1000 * 60 * 60 * 24)) + 1)
-    const start = range === 'custom' ? new Date(customFrom) : new Date()
+    
+    // Use UTC for date calculations to avoid timezone shifts during the loop
+    const start = range === 'custom' ? new Date(customFrom + 'T00:00:00') : new Date()
     if (range !== 'custom') start.setDate(start.getDate() - (days - 1))
+    
     for (let i = 0; i < Math.min(days, 31); i++) {
       const d = new Date(start)
       d.setDate(d.getDate() + i)
@@ -264,8 +271,8 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="h-[200px] w-full flex items-end justify-between gap-1 overflow-x-auto">
-            {chartData.map((day) => (
-              <div key={day.date} className="flex-1 min-w-[32px] flex flex-col items-center">
+            {chartData.map((day, idx) => (
+              <div key={day.date || idx} className="flex-1 min-w-[32px] flex flex-col items-center">
                 <div
                   className="w-full bg-blue-500 rounded-t-lg transition-all hover:bg-blue-600 min-h-[4px]"
                   style={{ height: `${Math.max(4, (day.count / maxCount) * 160)}px` }}

@@ -15,6 +15,7 @@ function ContactFormInner({ className = "" }) {
     email: '',
     postcode: '',
     service: '',
+    other_service: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,6 +35,13 @@ function ContactFormInner({ className = "" }) {
       setFormData(prev => ({
         ...prev,
         message: `I'm interested in ${subject} cleaning service. Please provide more details.`
+      }));
+    } else if (type === 'area-request') {
+      setFormData(prev => ({
+        ...prev,
+        service: 'area-request',
+        other_service: area || '',
+        message: `I'm interested in your laundry services but I couldn't find my area in your list. I am located in ${area || '[Please specify your area]'} and would like to know if you can accommodate me.`
       }));
     } else if (area) {
       setFormData(prev => ({
@@ -69,7 +77,20 @@ function ContactFormInner({ className = "" }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          service: formData.service === 'other' ? (formData.other_service || 'Other') 
+                 : formData.service === 'area-request' ? `Area Request: ${formData.other_service || 'Not specified'}`
+                 : formData.service === 'general-inquiry' ? 'General Inquiries'
+                 : formData.service === 'policy-issue' ? 'Policy Issue'
+                 : formData.service === 'contact-developer' ? 'Contact Developer'
+                 : formData.service === 'iron' ? 'Iron Only'
+                 : formData.service === 'wash-iron' ? 'Wash + Iron'
+                 : formData.service === 'wash-dry-fold' ? 'Wash, Dry & Fold'
+                 : formData.service === 'dry-cleaning' ? 'Dry Cleaning'
+                 : formData.service === 'commercial' ? 'Commercial / Business'
+                 : formData.service
+        }),
       });
 
       const data = await response.json();
@@ -82,6 +103,7 @@ function ContactFormInner({ className = "" }) {
           email: '',
           postcode: '',
           service: '',
+          other_service: '',
           message: ''
         });
         // Redirect to thank you page
@@ -172,7 +194,35 @@ function ContactFormInner({ className = "" }) {
           <option value="wash-dry-fold">Wash, Dry & Fold</option>
           <option value="dry-cleaning">Dry Cleaning</option>
           <option value="commercial">Commercial / Business</option>
+          <option value="area-request">Request My Area</option>
+          <option value="general-inquiry">General Inquiries</option>
+          <option value="policy-issue">Policy Issue</option>
+          <option value="contact-developer">Contact Developer</option>
+          <option value="other">Other</option>
         </select>
+
+        {(formData.service === 'other' || formData.service === 'area-request') && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="mt-3 relative"
+          >
+            <label htmlFor="other_service" className="text-[10px] font-bold text-primary uppercase tracking-widest absolute -top-2 left-4 bg-background px-2 z-10">
+              {formData.service === 'area-request' ? 'Specify Your Area' : 'Specify Request'}
+            </label>
+            <input
+              id="other_service"
+              type="text"
+              name="other_service"
+              value={formData.other_service}
+              onChange={handleChange}
+              required
+              className="w-full px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl border-2 border-primary/20 bg-primary/5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-sm md:text-base font-medium placeholder:text-slate-400"
+              placeholder={formData.service === 'area-request' ? 'Which area are you located in?' : 'What do you need?'}
+              autoFocus
+            />
+          </motion.div>
+        )}
       </div>
 
       <div className="space-y-2">

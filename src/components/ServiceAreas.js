@@ -208,12 +208,12 @@ const ServiceAreas = () => {
               Call 01494 445291
             </a>
             <span className="text-muted-foreground font-medium text-sm sm:text-base">- OR -</span>
-            <a
-              href="#contact"
-              className="text-primary font-bold hover:underline underline-offset-8 text-sm sm:text-base"
+            <Link
+              href="/contact?type=area-request"
+              className="px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 border-2 border-primary text-primary rounded-full font-bold hover:scale-105 hover:bg-primary/5 transition-all flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
             >
-              Send an Inquiry
-            </a>
+              Request Coverage
+            </Link>
           </div>
           <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-primary/5 blur-[60px] sm:blur-[80px] md:blur-[100px] pointer-events-none" />
         </motion.div>
