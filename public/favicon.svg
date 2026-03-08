@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0095da"/>
+      <stop offset="100%" style="stop-color:#006ba6"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="96" ry="96" fill="url(#bg)"/>
+  <!-- S letter - stylized script -->
+  <path d="
+    M 108 310
+    C 108 350, 135 372, 175 372
+    C 210 372, 240 355, 240 325
+    C 240 300, 218 288, 185 275
+    C 155 263, 128 248, 128 210
+    C 128 165, 165 138, 210 138
+    C 240 138, 262 148, 275 165
+    L 255 195
+    C 245 182, 230 172, 210 172
+    C 182 172, 165 188, 165 210
+    C 165 235, 188 247, 218 258
+    C 252 272, 278 290, 278 328
+    C 278 375, 238 405, 178 405
+    C 135 405, 105 380, 95 355
+    Z
+  " fill="#ffffff"/>
+  <!-- L letter - elegant with descender flourish -->
+  <path d="
+    M 270 138
+    L 310 138
+    L 310 365
+    L 420 365
+    L 420 400
+    L 270 400
+    Z
+  " fill="#ffffff"/>
+  <!-- Decorative dot cluster (from logo's swirl) -->
+  <circle cx="295" cy="118" r="12" fill="#ffffff" opacity="0.9"/>
+  <circle cx="275" cy="105" r="9" fill="#ffffff" opacity="0.7"/>
+  <circle cx="258" cy="98" r="7" fill="#ffffff" opacity="0.5"/>
+  <circle cx="244" cy="96" r="5" fill="#ffffff" opacity="0.35"/>
+</svg>

@@ -119,14 +119,22 @@ export const metadata = {
       'max-snippet': -1,
     },
   },
+  icons: {
+    icon: [
+      { url: '/icon0.svg', type: 'image/svg+xml' },
+      { url: '/icon1.png', type: 'image/png', sizes: '96x96' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
+  },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Speedy Laundry",
+    title: "Speeds Laundry",
   },
   other: {
-    "apple-mobile-web-app-title": "Speedy Laundry",
+    "apple-mobile-web-app-title": "Speeds Laundry",
   },
 };
 
