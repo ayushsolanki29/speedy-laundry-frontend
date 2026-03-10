@@ -4,6 +4,9 @@ import { useState, useRef } from 'react'
 import { Upload, X, Loader2, Image as ImageIcon, CheckCircle2 } from 'lucide-react'
 import { toast } from 'sonner'
 
+const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL || 'http://localhost/speedy-laundry/cdn/'
+const CDN_UPLOAD_URL = `${CDN_URL.replace(/\/+$/, '')}/api/upload.php`
+
 export default function ImageUploader({ onUploadSuccess, currentImage }) {
     const [isUploading, setIsUploading] = useState(false)
     const [previewUrl, setPreviewUrl] = useState(currentImage || null)
@@ -24,7 +27,7 @@ export default function ImageUploader({ onUploadSuccess, currentImage }) {
 
         setIsUploading(true)
         try {
-            const response = await fetch('http://localhost/speedy-laundry/cdn/api/upload.php', {
+            const response = await fetch(CDN_UPLOAD_URL, {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer secure_cdn_token_123456'

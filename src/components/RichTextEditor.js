@@ -29,6 +29,9 @@ import {
 import { toast } from 'sonner'
 import { useCallback } from 'react'
 
+const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL || 'http://localhost/speedy-laundry/cdn/'
+const CDN_UPLOAD_URL = `${CDN_URL.replace(/\/+$/, '')}/api/upload.php`
+
 const MenuBar = ({ editor }) => {
     if (!editor) {
         return null
@@ -48,7 +51,7 @@ const MenuBar = ({ editor }) => {
                 const toastId = toast.loading('Uploading image...')
 
                 try {
-                    const response = await fetch('http://localhost/speedy-laundry/cdn/api/upload.php', {
+                    const response = await fetch(CDN_UPLOAD_URL, {
                         method: 'POST',
                         headers: {
                             'Authorization': 'Bearer secure_cdn_token_123456'
