@@ -201,12 +201,12 @@ function CommentModerationContent() {
                                             <div className="flex items-center gap-2 mb-1">
                                                 <h3 className="font-black text-slate-900">{comment.name}</h3>
                                                 <span className="text-[10px] font-medium text-slate-400">•</span>
-                                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-0.5 rounded-full">{new Date(comment.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
+                                                <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 px-2 py-0.5 rounded-full">{new Date(comment.created_at_iso || comment.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
                                             </div>
                                             <div className="flex items-center gap-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                                                 <span className="flex items-center gap-1.5"><Mail className="w-3 h-3" />{comment.email}</span>
                                                 <span className="text-slate-200">|</span>
-                                                <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />{new Date(comment.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                                <span className="flex items-center gap-1.5"><Clock className="w-3 h-3" />{new Date(comment.created_at_iso || comment.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Europe/London' })}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -238,7 +238,7 @@ function CommentModerationContent() {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 mb-1">
                                                         <span className="text-[10px] font-black text-primary uppercase tracking-widest">Admin Reply</span>
-                                                        <span className="text-[9px] font-bold text-slate-400">{new Date(reply.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
+                                                        <span className="text-[9px] font-bold text-slate-400">{new Date(reply.created_at_iso || reply.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
                                                     </div>
                                                     <p className="text-xs text-slate-700 font-medium leading-relaxed">{reply.content}</p>
                                                 </div>

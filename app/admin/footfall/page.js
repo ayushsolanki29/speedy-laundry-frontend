@@ -261,10 +261,10 @@ export default function FootfallPage() {
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <p className="text-sm font-bold text-gray-800">
-                                                    {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    {new Date(log.created_at_iso || log.created_at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Europe/London' })}
                                                 </p>
                                                 <p className="text-[10px] text-gray-400 font-bold uppercase">
-                                                    {new Date(log.created_at).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', timeZone: 'Europe/London' })}
+                                                    {new Date(log.created_at_iso || log.created_at).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', timeZone: 'Europe/London' })}
                                                 </p>
                                             </td>
                                         </tr>

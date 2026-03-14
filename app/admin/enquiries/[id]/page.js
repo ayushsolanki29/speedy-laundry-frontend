@@ -285,7 +285,7 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
                                 <div className="mt-1 w-2 h-2 rounded-full bg-blue-600 ring-4 ring-blue-50 shrink-0" />
                                 <div>
                                     <p className="text-sm font-bold text-foreground">Enquiry Received</p>
-                                    <p className="text-xs text-muted-foreground">{formatDate(enquiry.created_at)}</p>
+                                    <p className="text-xs text-muted-foreground">{formatDate(enquiry.created_at_iso || enquiry.created_at)}</p>
                                     <p className="mt-2 text-sm text-gray-600">Initial request submitted via website contact form.</p>
                                 </div>
                             </div>

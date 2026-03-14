@@ -294,7 +294,7 @@ function EmailQueueContent() {
                                             </td>
                                             <td className="px-6 py-5">
                                                 <span className="text-xs font-medium text-muted-foreground whitespace-nowrap">
-                                                    {formatDate(item.created_at)}
+                                                    {formatDate(item.created_at_iso || item.created_at)}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-5 text-right">

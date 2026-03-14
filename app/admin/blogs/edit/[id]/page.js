@@ -370,7 +370,7 @@ export default function EditBlogPage({ params }) {
                                     <div key={comment.id} className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100">
                                         <div className="flex items-center gap-2 mb-2">
                                             <span className="font-bold text-slate-800 text-sm">{comment.name}</span>
-                                            <span className="text-[9px] text-slate-400">{new Date(comment.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
+                                            <span className="text-[9px] text-slate-400">{new Date(comment.created_at_iso || comment.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
                                         </div>
                                         <p className="text-xs text-slate-600 mb-3">"{comment.content}"</p>
                                         {comment.replies?.map((reply) => (

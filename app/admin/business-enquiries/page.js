@@ -185,7 +185,7 @@ function BusinessEnquiriesContent() {
                                                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mb-3">
                                                         <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> {enquiry.email}</span>
                                                         <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {enquiry.phone}</span>
-                                                        <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatDate(enquiry.created_at)}</span>
+                                                        <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatDate(enquiry.created_at_iso || enquiry.created_at)}</span>
                                                         {displayAddress && (
                                                             <span className="flex items-center gap-1.5 min-w-0">
                                                                 <MapPin className="w-3.5 h-3.5 shrink-0" />
