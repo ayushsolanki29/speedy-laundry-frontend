@@ -145,7 +145,7 @@ export default function DashboardPage() {
       chartData.push({
         date: dateStr,
         count: found ? parseInt(found.count, 10) : 0,
-        label: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+        label: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'Europe/London' })
       })
     }
   }

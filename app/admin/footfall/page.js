@@ -264,7 +264,7 @@ export default function FootfallPage() {
                                                     {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                 </p>
                                                 <p className="text-[10px] text-gray-400 font-bold uppercase">
-                                                    {new Date(log.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                                    {new Date(log.created_at).toLocaleDateString('en-GB', { month: 'short', day: 'numeric', timeZone: 'Europe/London' })}
                                                 </p>
                                             </td>
                                         </tr>

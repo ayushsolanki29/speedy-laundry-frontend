@@ -209,7 +209,7 @@ function BlogsContent() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-xs font-bold text-gray-500">{new Date(blog.created_at).toLocaleDateString()}</span>
+                                            <span className="text-xs font-bold text-gray-500">{new Date(blog.created_at).toLocaleDateString('en-GB', { timeZone: 'Europe/London' })}</span>
                                         </td>
                                         <td className="px-6 py-4 text-right">
                                             <div className="relative flex items-center justify-end gap-1">
