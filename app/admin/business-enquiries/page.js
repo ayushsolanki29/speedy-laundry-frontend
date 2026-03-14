@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { Search, Building2, Mail, Phone, Calendar, ChevronRight, Loader2, RefreshCcw } from 'lucide-react'
+import { Search, Building2, Mail, Phone, Calendar, ChevronRight, Loader2, RefreshCcw, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import Pagination from '@/components/ui/Pagination'
+import { parseEnquiryMessage } from '@/lib/enquiryMeta'
 
 function BusinessEnquiriesContent() {
     const [enquiries, setEnquiries] = useState([])
@@ -142,50 +143,67 @@ function BusinessEnquiriesContent() {
                         <p className="text-gray-400 text-sm">Commercial quote requests will appear here.</p>
                     </div>
                 ) : (
-                    filteredEnquiries.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((enquiry, index) => (
-                        <motion.div
-                            key={enquiry.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.05 }}
-                        >
-                            <Link
-                                href={`/admin/enquiries/${enquiry.id}`}
-                                className="block bg-white p-6 rounded-2xl shadow-sm border border-border/50 hover:shadow-md transition-all group cursor-pointer"
-                            >
-                                <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                                    <div className="flex items-start gap-4">
-                                        <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white font-bold text-lg shrink-0">
-                                            <Building2 size={24} />
+                    filteredEnquiries
+                        .slice((currentPage - 1) * pageSize, currentPage * pageSize)
+                        .map((enquiry, index) => {
+                            const meta = parseEnquiryMessage(enquiry.message)
+                            const displayAddress = enquiry.address || meta.address
+
+                            return (
+                                <motion.div
+                                    key={enquiry.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: index * 0.05 }}
+                                >
+                                    <Link
+                                        href={`/admin/enquiries/${enquiry.id}`}
+                                        className="block bg-white p-6 rounded-2xl shadow-sm border border-border/50 hover:shadow-md transition-all group cursor-pointer"
+                                    >
+                                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                                            <div className="flex items-start gap-4">
+                                                <div className="w-12 h-12 rounded-xl bg-slate-900 flex items-center justify-center text-white font-bold text-lg shrink-0">
+                                                    <Building2 size={24} />
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <div className="flex items-center flex-wrap gap-2 mb-1">
+                                                        <h3 className="font-bold text-foreground text-lg truncate">{enquiry.full_name}</h3>
+                                                        <span
+                                                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${enquiry.status === 'new'
+                                                                ? 'bg-blue-600 text-white'
+                                                                : 'bg-gray-100 text-gray-600'
+                                                                }`}
+                                                        >
+                                                            {enquiry.status}
+                                                        </span>
+                                                        <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border border-slate-200">
+                                                            BUSINESS QUOTE
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mb-3">
+                                                        <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> {enquiry.email}</span>
+                                                        <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {enquiry.phone}</span>
+                                                        <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatDate(enquiry.created_at)}</span>
+                                                        {displayAddress && (
+                                                            <span className="flex items-center gap-1.5 min-w-0">
+                                                                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                                                                <span className="truncate">{displayAddress}</span>
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="text-gray-600 bg-gray-50/50 p-4 rounded-xl border border-gray-100/50 text-sm md:text-base whitespace-pre-wrap font-medium">
+                                                        {meta.cleanedMessage || enquiry.message}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button className="hidden md:flex p-2 rounded-full hover:bg-gray-100 text-muted-foreground group-hover:text-primary transition-colors shrink-0">
+                                                <ChevronRight className="w-5 h-5" />
+                                            </button>
                                         </div>
-                                        <div className="min-w-0">
-                                            <div className="flex items-center flex-wrap gap-2 mb-1">
-                                                <h3 className="font-bold text-foreground text-lg truncate">{enquiry.full_name}</h3>
-                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider ${enquiry.status === 'new' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'
-                                                    }`}>
-                                                    {enquiry.status}
-                                                </span>
-                                                <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider border border-slate-200">
-                                                    BUSINESS QUOTE
-                                                </span>
-                                            </div>
-                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground mb-3">
-                                                <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> {enquiry.email}</span>
-                                                <span className="flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> {enquiry.phone}</span>
-                                                <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {formatDate(enquiry.created_at)}</span>
-                                            </div>
-                                            <div className="text-gray-600 bg-gray-50/50 p-4 rounded-xl border border-gray-100/50 text-sm md:text-base whitespace-pre-wrap font-medium">
-                                                {enquiry.message}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button className="hidden md:flex p-2 rounded-full hover:bg-gray-100 text-muted-foreground group-hover:text-primary transition-colors shrink-0">
-                                        <ChevronRight className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </Link>
-                        </motion.div>
-                    ))
+                                    </Link>
+                                </motion.div>
+                            )
+                        })
                 )}
             </div>
             

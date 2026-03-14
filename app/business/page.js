@@ -78,6 +78,7 @@ export default function BusinessPage() {
     full_name: '',
     phone: '',
     email: '',
+    address: '',
     industry: '',
     message: ''
   });
@@ -97,6 +98,10 @@ export default function BusinessPage() {
     // Client-side validation
     if (formData.phone.length > 30) {
       toast.error('Phone number is too long (max 30 characters)');
+      return;
+    }
+    if (formData.address.length > 255) {
+      toast.error('Address is too long (max 255 characters)');
       return;
     }
 
@@ -120,6 +125,7 @@ export default function BusinessPage() {
           full_name: '',
           phone: '',
           email: '',
+          address: '',
           industry: '',
           message: ''
         });
@@ -559,6 +565,19 @@ export default function BusinessPage() {
                         required
                         className="w-full px-4 py-3 rounded-lg lg:rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm sm:text-base"
                         placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="address" className="block text-sm font-medium text-foreground mb-2">Address *</label>
+                      <input
+                        id="address"
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full px-4 py-3 rounded-lg lg:rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm sm:text-base"
+                        placeholder="Business address"
                       />
                     </div>
                     <div>

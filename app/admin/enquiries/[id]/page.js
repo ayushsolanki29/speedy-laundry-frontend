@@ -23,6 +23,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { parseEnquiryMessage } from '@/lib/enquiryMeta'
 
 export default function EnquiryDetailPage({ params: paramsPromise }) {
     const params = use(paramsPromise)
@@ -140,6 +141,11 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
         });
     };
 
+    const meta = parseEnquiryMessage(enquiry?.message);
+    const displayPostcode = enquiry?.postcode && enquiry.postcode !== 'BUSINESS' ? enquiry.postcode : '';
+    const displayMessage = meta.cleanedMessage || enquiry?.message || 'No specific message was provided with this inquiry.';
+    const displayAddress = enquiry?.address || meta.address || '';
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh]">
@@ -206,7 +212,7 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
                         <div className="relative">
                             <div className="absolute -left-4 top-0 bottom-0 w-1 bg-primary/20 rounded-full" />
                             <p className="text-gray-700 text-lg leading-relaxed font-medium italic">
-                                "{enquiry.message || 'No specific message was provided with this inquiry.'}"
+                                "{displayMessage}"
                             </p>
                         </div>
 
@@ -325,10 +331,22 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
                                     <MapPin className="w-6 h-6" />
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="text-xs text-muted-foreground uppercase tracking-tighter">Postcode</p>
-                                    <p className="font-bold text-foreground">{enquiry.postcode}</p>
+                                    <p className="text-xs text-muted-foreground uppercase tracking-tighter">Address</p>
+                                    <p className="font-bold text-foreground break-words">{displayAddress || 'Not provided'}</p>
                                 </div>
                             </div>
+
+                            {displayPostcode && (
+                                <div className="flex items-center gap-4">
+                                    <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400">
+                                        <MapPin className="w-6 h-6" />
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-xs text-muted-foreground uppercase tracking-tighter">Postcode</p>
+                                        <p className="font-bold text-foreground">{displayPostcode}</p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </motion.div>
 

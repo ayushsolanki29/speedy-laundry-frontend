@@ -13,6 +13,7 @@ function ContactFormInner({ className = "" }) {
     full_name: '',
     phone: '',
     email: '',
+    address: '',
     postcode: '',
     service: '',
     other_service: '',
@@ -68,6 +69,10 @@ function ContactFormInner({ className = "" }) {
       toast.error('Postcode is too long (max 20 characters)');
       return;
     }
+    if (formData.address.length > 255) {
+      toast.error('Address is too long (max 255 characters)');
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -82,8 +87,6 @@ function ContactFormInner({ className = "" }) {
           service: formData.service === 'other' ? (formData.other_service || 'Other') 
                  : formData.service === 'area-request' ? `Area Request: ${formData.other_service || 'Not specified'}`
                  : formData.service === 'general-inquiry' ? 'General Inquiries'
-                 : formData.service === 'policy-issue' ? 'Policy Issue'
-                 : formData.service === 'contact-developer' ? 'Contact Developer'
                  : formData.service === 'iron' ? 'Iron Only'
                  : formData.service === 'wash-iron' ? 'Wash + Iron'
                  : formData.service === 'wash-dry-fold' ? 'Wash, Dry & Fold'
@@ -101,6 +104,7 @@ function ContactFormInner({ className = "" }) {
           full_name: '',
           phone: '',
           email: '',
+          address: '',
           postcode: '',
           service: '',
           other_service: '',
@@ -177,6 +181,19 @@ function ContactFormInner({ className = "" }) {
             placeholder="e.g. HP12 3RD"
           />
         </div>
+        <div className="space-y-2 md:col-span-2">
+          <label htmlFor="address" className="text-sm font-semibold text-foreground/80 ml-1">Address *</label>
+          <input
+            id="address"
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            required
+            className="w-full px-4 md:px-5 py-3 md:py-4 rounded-xl md:rounded-2xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm md:text-base"
+            placeholder="House/Flat, Street, Area"
+          />
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -196,8 +213,6 @@ function ContactFormInner({ className = "" }) {
           <option value="commercial">Commercial / Business</option>
           <option value="area-request">Request My Area</option>
           <option value="general-inquiry">General Inquiries</option>
-          <option value="policy-issue">Policy Issue</option>
-          <option value="contact-developer">Contact Developer</option>
           <option value="other">Other</option>
         </select>
 
