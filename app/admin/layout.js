@@ -318,7 +318,7 @@ export default function AdminLayout({ children }) {
                                   </p>
                                   <p className="text-[9px] text-slate-400 flex items-center gap-1">
                                     <Clock size={10} />
-                                    {new Date(notif.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })}
+                                    {new Date(notif.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Europe/London' })}
                                   </p>
                                 </div>
                               </Link>
@@ -395,7 +395,7 @@ export default function AdminLayout({ children }) {
                                   )}
                                   <p className="text-[9px] text-slate-400 flex items-center gap-1">
                                     <Clock size={10} />
-                                    {new Date(activity.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/London' })}
+                                    {new Date(activity.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Europe/London' })}
                                   </p>
                                 </div>
                               </Link>

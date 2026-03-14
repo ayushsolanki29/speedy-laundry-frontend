@@ -148,11 +148,12 @@ function EmailQueueContent() {
     const formatDate = (dateString) => {
         if (!dateString) return '-'
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', {
+        return date.toLocaleString('en-GB', {
             day: 'numeric',
             month: 'short',
             hour: '2-digit',
             minute: '2-digit',
+            hour12: true,
             timeZone: 'Europe/London'
         });
     };
