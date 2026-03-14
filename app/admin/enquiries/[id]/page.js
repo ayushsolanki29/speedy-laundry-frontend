@@ -31,6 +31,7 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
     const [enquiry, setEnquiry] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isUpdating, setIsUpdating] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     const [showEmailModal, setShowEmailModal] = useState(false)
     const [emailSubject, setEmailSubject] = useState('')
     const [emailMessage, setEmailMessage] = useState('')
@@ -126,6 +127,31 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
         }
     }
 
+    const deleteEnquiry = async () => {
+        const ok = window.confirm('Delete this enquiry permanently?')
+        if (!ok) return
+
+        setIsDeleting(true)
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-enquiry.php`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: params.id })
+            })
+            const data = await response.json()
+            if (data.status === 'success') {
+                toast.success('Enquiry deleted')
+                router.push('/admin/enquiries')
+            } else {
+                toast.error(data.message || 'Failed to delete enquiry')
+            }
+        } catch (error) {
+            toast.error('Failed to delete enquiry')
+        } finally {
+            setIsDeleting(false)
+        }
+    }
+
     useEffect(() => {
         fetchEnquiry()
     }, [params.id])
@@ -187,8 +213,14 @@ export default function EnquiryDetailPage({ params: paramsPromise }) {
                         <option value="cancelled">Action: Cancel Request</option>
                     </select>
 
-                    <button className="p-2.5 rounded-xl bg-white border border-border text-red-500 hover:bg-red-50 transition-colors shadow-sm">
-                        <Trash2 className="w-5 h-5" />
+                    <button
+                        type="button"
+                        onClick={deleteEnquiry}
+                        disabled={isDeleting}
+                        className="p-2.5 rounded-xl bg-white border border-border text-red-500 hover:bg-red-50 transition-colors shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                        title="Delete enquiry"
+                    >
+                        {isDeleting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Trash2 className="w-5 h-5" />}
                     </button>
                 </div>
             </div>
