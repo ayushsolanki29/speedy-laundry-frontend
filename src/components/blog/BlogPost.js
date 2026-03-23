@@ -102,11 +102,19 @@ const BlogPost = ({ slug }) => {
               Back to Blog
             </Link>
 
-            <div className="mb-8">
-              <span className="px-6 py-2 bg-white/5 backdrop-blur-md border border-white/10 text-primary rounded-full text-[11px] font-bold uppercase tracking-widest">
-                {post.category || 'Laundry Tips'}
-              </span>
-            </div>
+            {post.category && (
+              <div className="mb-8 flex flex-wrap justify-center gap-2">
+                {post.category.split(',').map((cat, index) => (
+                  <Link 
+                    key={index}
+                    href={`/blog?c=${encodeURIComponent(cat.trim())}`}
+                    className="px-6 py-2 bg-white/5 backdrop-blur-md border border-white/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 rounded-full text-[11px] font-bold uppercase tracking-widest"
+                  >
+                    {cat.trim()}
+                  </Link>
+                ))}
+              </div>
+            )}
 
             <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-8 max-w-4xl mx-auto leading-tight">
               {post.title}
@@ -157,11 +165,21 @@ const BlogPost = ({ slug }) => {
                 <Tag className="w-5 h-5 text-primary" />
                 <span className="text-header font-bold text-sm">Tags:</span>
                 <div className="flex flex-wrap gap-2">
-                  {['Laundry Tips', 'Clothing Care', 'Washing Machine', 'Fabric Care'].map(tag => (
-                    <span key={tag} className="px-4 py-1.5 bg-slate-50 text-slate-500 rounded-full text-[11px] font-bold">
-                      {tag}
+                  {post.category ? (
+                    post.category.split(',').map((cat, index) => (
+                      <Link 
+                        key={index}
+                        href={`/blog?c=${encodeURIComponent(cat.trim())}`}
+                        className="px-4 py-1.5 bg-slate-50 text-slate-500 hover:bg-primary hover:text-white transition-all duration-300 rounded-full text-[11px] font-bold"
+                      >
+                        {cat.trim()}
+                      </Link>
+                    ))
+                  ) : (
+                    <span className="px-4 py-1.5 bg-slate-50 text-slate-500 rounded-full text-[11px] font-bold">
+                      Uncategorized
                     </span>
-                  ))}
+                  )}
                 </div>
               </div>
 

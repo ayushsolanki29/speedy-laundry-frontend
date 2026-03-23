@@ -4,10 +4,13 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, User, ArrowRight, Calendar, Loader2, SearchX } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const BlogPosts = ({ searchQuery }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const categoryFilter = searchParams.get('c') || "";
+  
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -19,7 +22,10 @@ const BlogPosts = ({ searchQuery }) => {
 
   const fetchBlogs = useCallback(async (currentOffset, query = "", isAppend = false) => {
     try {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/blogs.php?limit=${limit}&offset=${currentOffset}${query ? `&search=${encodeURIComponent(query)}` : ''}`;
+      let url = `${process.env.NEXT_PUBLIC_API_URL}/blogs.php?limit=${limit}&offset=${currentOffset}`;
+      if (query) url += `&search=${encodeURIComponent(query)}`;
+      if (categoryFilter) url += `&category=${encodeURIComponent(categoryFilter)}`;
+      
       const response = await fetch(url);
       const data = await response.json();
 
@@ -38,14 +44,14 @@ const BlogPosts = ({ searchQuery }) => {
       setIsLoading(false);
       setIsFetchingMore(false);
     }
-  }, []);
+  }, [categoryFilter]);
 
   // Initial load / search load
   useEffect(() => {
     setIsLoading(true);
     setOffset(0);
     fetchBlogs(0, searchQuery, false);
-  }, [searchQuery, fetchBlogs]);
+  }, [searchQuery, categoryFilter, fetchBlogs]);
 
   // Infinite Scroll Observer
   const lastElementRef = useCallback(node => {
@@ -79,15 +85,18 @@ const BlogPosts = ({ searchQuery }) => {
   return (
     <section className="py-24 bg-white min-h-screen">
       <div className="container">
-        {/* Search Results Header */}
-        {searchQuery && (
+        {/* Search/Category Results Header */}
+        {(searchQuery || categoryFilter) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="mb-12"
           >
             <h2 className="text-2xl font-display font-bold text-header">
-              {blogs.length > 0 ? `Found ${blogs.length} articles for "${searchQuery}"` : `No results for "${searchQuery}"`}
+              {blogs.length > 0 
+                ? `Found ${blogs.length} articles ${searchQuery ? `for "${searchQuery}"` : ''}${categoryFilter ? `${searchQuery ? ' in ' : 'for '}"${categoryFilter}"` : ''}`
+                : `No results ${searchQuery ? `for "${searchQuery}"` : ''}${categoryFilter ? `${searchQuery ? ' in ' : 'for '}"${categoryFilter}"` : ''}`
+              }
             </h2>
             <div className="h-1 w-20 bg-primary mt-4 rounded-full" />
           </motion.div>
@@ -119,9 +128,16 @@ const BlogPosts = ({ searchQuery }) => {
                   </div>
                 )}
                 <div className="absolute top-6 left-6 flex gap-2">
-                  <span className="px-5 py-2 bg-primary text-white rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">
-                    {featuredBlog.category || 'Featured'}
-                  </span>
+                  {(featuredBlog.category || 'Featured').split(',').map((cat, index) => (
+                    <Link 
+                      key={index}
+                      href={`/blog?c=${encodeURIComponent(cat.trim())}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="px-5 py-2 bg-primary text-white hover:bg-white hover:text-primary transition-colors duration-300 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl"
+                    >
+                      {cat.trim()}
+                    </Link>
+                  ))}
                   <span className="px-5 py-2 bg-white/90 backdrop-blur-md text-header rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">
                     Must Read
                   </span>
@@ -186,9 +202,18 @@ const BlogPosts = ({ searchQuery }) => {
                     </div>
                   )}
                   <div className="absolute top-4 left-4">
-                    <span className="px-4 py-1.5 bg-white/90 backdrop-blur-sm text-primary rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg">
-                      {post.category || 'Insights'}
-                    </span>
+                  <div className="flex flex-wrap gap-2">
+                    {(post.category || 'Insights').split(',').map((cat, index) => (
+                      <Link 
+                        key={index}
+                        href={`/blog?c=${encodeURIComponent(cat.trim())}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="px-4 py-1.5 bg-white/90 backdrop-blur-sm text-primary hover:bg-primary hover:text-white transition-colors duration-300 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg"
+                      >
+                        {cat.trim()}
+                      </Link>
+                    ))}
+                  </div>
                   </div>
                 </div>
 
