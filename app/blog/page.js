@@ -6,7 +6,7 @@ import BlogHero from "@/components/blog/BlogHero";
 import BlogPosts from "@/components/blog/BlogPosts";
 import CTABanner from "@/components/CTABanner";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 
 export default function Blog() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,7 +16,9 @@ export default function Blog() {
       <Header />
       <main>
         <BlogHero searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        <BlogPosts searchQuery={searchQuery} />
+        <Suspense fallback={<div className="py-20 text-center">Loading articles...</div>}>
+          <BlogPosts searchQuery={searchQuery} />
+        </Suspense>
         <CTABanner />
       </main>
       <Footer />
