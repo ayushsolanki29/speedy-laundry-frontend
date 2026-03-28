@@ -5,6 +5,9 @@ export const metadata = {
     "laundry pickup High Wycombe", "book dry cleaning", "contact laundry service",
     "laundry collection Buckinghamshire", "Cressex Business Park laundry"
   ],
+  alternates: {
+    canonical: "/contact",
+  },
   openGraph: {
     title: "Contact Speedy Laundry - Free Pickup & Delivery",
     description: "Ready to care for your garments. Book a collection today.",

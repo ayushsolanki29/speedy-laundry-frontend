@@ -8,6 +8,9 @@ export const metadata = {
     "professional laundry services", "laundry pickup and delivery", "bedding cleaning",
     "commercial laundry", "Speedy Laundry services"
   ],
+  alternates: {
+    canonical: "/services",
+  },
   openGraph: {
     title: "Our Professional Laundry Services | Speedy Laundry",
     description: "Premium laundry care for your everyday and delicate garments. Fast 24-48 hour turnaround.",

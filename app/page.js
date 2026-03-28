@@ -26,14 +26,17 @@ export const metadata = {
     "commercial laundry Buckinghamshire", "laundry HP12",
     "wash and iron near me", "express laundry service", "bedding laundry service"
   ],
+  alternates: {
+    canonical: "/",
+  },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LaundryService",
   "name": "Speedy Laundry",
-  "image": "https://speedylaundry.co.uk/assets/logo.svg",
-  "url": "https://speedylaundry.co.uk",
+  "image": "https://www.speedylaundry.co.uk/assets/logo.svg",
+  "url": "https://www.speedylaundry.co.uk",
   "telephone": "01494 445291",
   "priceRange": "$$",
   "address": {

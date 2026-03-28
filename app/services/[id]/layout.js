@@ -20,6 +20,9 @@ export async function generateMetadata({ params }) {
       "laundry service near me",
       "free pickup and delivery"
     ],
+    alternates: {
+      canonical: `/services/${id}`,
+    },
     openGraph: {
       title: `${service.title} | Premium Care by Speedy Laundry`,
       description: service.description,

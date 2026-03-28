@@ -5,6 +5,9 @@ export const metadata = {
     "about speedy laundry", "local laundry specialists", "family owned laundry Buckinghamshire",
     "eco-friendly laundry history", "professional laundry team", "laundry service mission"
   ],
+  alternates: {
+    canonical: "/about",
+  },
   openGraph: {
     title: "The Story of Speedy Laundry | Quality & Care Since 1994",
     description: "Discover how we've been serving Buckinghamshire with premium laundry services for over 30 years.",

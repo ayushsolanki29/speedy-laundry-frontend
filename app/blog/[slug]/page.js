@@ -14,6 +14,9 @@ export async function generateMetadata({ params }) {
       return {
         title: `${post.title} | Speedy Laundry Blog`,
         description: post.excerpt || "Expert laundry care tips and professional dry cleaning advice from Speedy Laundry.",
+        alternates: {
+          canonical: `/blog/${slug}`,
+        },
         openGraph: {
           title: post.title,
           description: post.excerpt,
@@ -27,6 +30,9 @@ export async function generateMetadata({ params }) {
 
   return {
     title: "Blog Post | Speedy Laundry",
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 

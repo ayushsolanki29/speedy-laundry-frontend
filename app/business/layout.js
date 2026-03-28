@@ -6,6 +6,9 @@ export const metadata = {
     "restaurant linen service", "gym towel service", "care home laundry",
     "workwear cleaning", "bulk laundry service", "B2B laundry solutions"
   ],
+  alternates: {
+    canonical: "/business",
+  },
   openGraph: {
     title: "Commercial Laundry Solutions | Speedy Laundry",
     description: "Partner with Buckinghamshire's trusted commercial laundry. Quality care, reliable delivery, and custom pricing.",

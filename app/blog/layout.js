@@ -5,6 +5,9 @@ export const metadata = {
     "laundry tips", "dry cleaning advice", "stain removal guide", 
     "Speedy Laundry blog", "Buckinghamshire business news"
   ],
+  alternates: {
+    canonical: "/blog",
+  },
   openGraph: {
     title: "Speedy Laundry Blog - Expert Care Tips",
     description: "Learn how to care for your favorite clothes with our expert guides.",

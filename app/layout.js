@@ -84,14 +84,11 @@ export const metadata = {
     address: true,
     telephone: true,
   },
-  metadataBase: new URL('https://speedylaundry.co.uk'),
-  alternates: {
-    canonical: '/',
-  },
+  metadataBase: new URL("https://www.speedylaundry.co.uk"),
   openGraph: {
     title: 'Speedy Laundry - Professional Laundry & Dry Cleaning',
     description: 'Free pickup and delivery for all your laundry, ironing, and dry cleaning needs.',
-    url: 'https://speedylaundry.co.uk',
+    url: "https://www.speedylaundry.co.uk",
     siteName: 'Speedy Laundry',
     images: [
       {
