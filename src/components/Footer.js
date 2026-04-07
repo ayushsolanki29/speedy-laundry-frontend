@@ -186,7 +186,7 @@ const Footer = () => {
               <span className="mx-2 opacity-20">|</span>
               Made with <span className="text-primary animate-pulse">❤️</span> by{" "}
               <Link 
-                href="https://ayushsolanki.com" 
+                href="https://ayushsolanki.site" 
                 target="_blank" 
                 className="text-white/70 hover:text-white transition-colors font-semibold"
               >
