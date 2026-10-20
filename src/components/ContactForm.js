@@ -100,6 +100,12 @@ function ContactFormInner({ className = "" }) {
 
       if (data.status === 'success') {
         toast.success(data.message);
+
+        // Google Ads / Analytics conversion event
+        if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+          window.gtag('event', 'conversion_event_submit_lead_form', {});
+        }
+
         setFormData({
           full_name: '',
           phone: '',

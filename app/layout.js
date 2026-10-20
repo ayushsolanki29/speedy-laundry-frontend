@@ -156,7 +156,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-7YCM9VPLXR');`}
+gtag('config', 'G-7YCM9VPLXR');
+
+function gtagSendEvent(url) {
+  var callback = function () {
+    if (typeof url === 'string') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion_event_submit_lead_form', {
+    'event_callback': callback,
+    'event_timeout': 2000
+  });
+  return false;
+}`}
         </Script>
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
