@@ -171,6 +171,10 @@ function gtagSendEvent(url) {
   return false;
 }`}
         </Script>
+        <Script
+          src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LeDSgwuAAAAAMEdWr-veRQLvbW32fHzAYCPRoVR'}`}
+          strategy="afterInteractive"
+        />
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <noscript>

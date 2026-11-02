@@ -77,6 +77,19 @@ function ContactFormInner({ className = "" }) {
     setIsSubmitting(true);
 
     try {
+      // Execute Google reCAPTCHA v3 invisibly
+      let recaptcha_token = '';
+      const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '6LeDSgwuAAAAAMEdWr-veRQLvbW32fHzAYCPRoVR';
+
+      if (typeof window !== 'undefined' && window.grecaptcha) {
+        try {
+          await new Promise((resolve) => window.grecaptcha.ready(resolve));
+          recaptcha_token = await window.grecaptcha.execute(siteKey, { action: 'submit_enquiry' });
+        } catch (captchaErr) {
+          console.warn('reCAPTCHA execution error:', captchaErr);
+        }
+      }
+
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/contact.php`, {
         method: 'POST',
         headers: {
@@ -84,6 +97,7 @@ function ContactFormInner({ className = "" }) {
         },
         body: JSON.stringify({
           ...formData,
+          recaptcha_token,
           service: formData.service === 'other' ? (formData.other_service || 'Other') 
                  : formData.service === 'area-request' ? `Area Request: ${formData.other_service || 'Not specified'}`
                  : formData.service === 'general-inquiry' ? 'General Inquiries'
@@ -276,6 +290,13 @@ function ContactFormInner({ className = "" }) {
           </>
         )}
       </button>
+
+      <p className="text-center text-xs text-muted-foreground/70 pt-1">
+        Protected by reCAPTCHA. Google{' '}
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Privacy Policy</a>
+        {' '}and{' '}
+        <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">Terms of Service</a> apply.
+      </p>
     </form>
   );
 }
